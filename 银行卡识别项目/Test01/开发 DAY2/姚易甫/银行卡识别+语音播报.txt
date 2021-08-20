@@ -1,0 +1,46 @@
+from aip import AipOcr
+from aip import AipSpeech
+from playsound import playsound
+
+# 定义常量
+APP_ID = '20565663'  # 输入所创建应用的APP_ID
+API_KEY = 'dCXCK7VCNSos92lfHHjci8sb'  # 输入所创建应用的API_KEY
+SECRET_KEY = 'FZFY56XeBZHBrrE6PQwIWLdXPlkaQkdD'  # 输入所创建应用的SECRET_KEY
+
+# 初始化AipFace对象
+aip0cr = AipOcr(APP_ID, API_KEY, SECRET_KEY)
+
+
+# 读取图片
+def get_file_content(filePath):
+    with open(filePath, 'rb') as fp:
+        return fp.read()
+
+
+ph = '2.jpg'  # 测试用例
+image = get_file_content(ph)  # 添加图片路径
+
+# 调用银行卡识别
+result_bank = aip0cr.bankcard(image)
+
+print("银行卡号：", result_bank["result"]["bank_card_number"])
+print("有效期：", result_bank["result"]["valid_date"])
+print("银行卡类型：", result_bank["result"]["bank_card_type"])  # 0:不能识别; 1: 借记卡; 2: 信用卡
+print("发卡行：", result_bank["result"]["bank_name"])
+
+# 初始化AipSpeech对象
+aipSpeech = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
+
+# 调用语音识别
+text = '这张银行卡的发卡行是' + result_bank["result"]["bank_name"] + '卡号是' + result_bank["result"]["bank_card_number"]
+result = aipSpeech.synthesis(text, 'zh', 1, {'spd': 4, 'vol': 6})
+print(result)
+
+# 识别正确返回语音二进制 错误则返回dict 参照下面错误码
+if not isinstance(result, dict):
+    with open('bank_card.mp3', 'wb') as f:
+        f.write(result)
+
+# 播放音频文件
+playsound("bank_card.mp3")
+playsound("bank_card.mp3")

@@ -1,0 +1,54 @@
+1. Git 和 SVN 两款工具的主要区别是什么？
+	SVN： 集中式管理
+	Git：    分布式管理
+
+2. 我们使用的 Git 客户端工具是什么？
+	图形化界面（小乌龟）： TortoiseGit-2.10.0.2
+
+3. 当前主流的 Git 代码托管平台有哪些，分别属于哪个公司？
+	GitHub、Gitlab、开源中国代码托管、CSDN代码托管
+
+4. 对于远程仓库 pull 和 clone 命令的区别是什么？
+	pull：将会获取远程服务器上的代码，并且立即合并到本地厂库。
+	clone：克隆一个本地厂库，clone会为被克隆的远程仓库创建一个名为“origin”的本地仓库，并为远程仓库的活动分支创建一个本地分支以及远程跟踪分支。
+
+5. 说明本地工作目录、暂存区和本地仓库的区别和作用分别是什么？
+	本地工作目录：克隆项目到本地后，项目所在的文件夹目录。
+	暂存区：用于存储工作区中添加上来的变更的文件的地方。
+	本地仓库：用于存储本地工作区和暂存区提交上来的变更过的文件的地方。
+
+6. 说明如何进行版本的回退？
+	1）输入git reflog,查看分支所有的操作历史记录 
+	2）查看HEAD@{num},其中num的数值越大，则代表当前的历史分支的时间点越往前，输入git reset --hard 还原历史版本 
+
+7. 访问远程 Gitee 仓库有几种途径，请简述说明。
+	1）首先在码云上先建一个仓库，创建之后会有个远程项目地址，然后：
+	git init 初始化
+	git add . （. 表示所有的) 将当前所有目录加入到git的Index暂存区
+	git commit -m “提交的描述信息” (注意这里应该是英文的双引号)
+	git remote add origin https://gitee.com/xxx/项目名
+	git push -u origin master 将文件上传到远程版本库的master分支
+	在对应的项目中，鼠标右击出现下图，并点击进入git命令号界面
+	** 先将远程仓库的内容合并到本地，然后再上传即可，命令如下：**
+	git pull --rebase origin master
+	git push -u origin master
+	到此为止，去刚才建的gitee仓库就可以找到自己传的项目了
+
+	2）首先在码云上先建一个仓库,cd 到本地文件夹中D:/XXXX //如果是在目标文件中git bash 则此步骤可省略,
+	git init 命令 //初始化一个git 本地仓库此时会在本地创建一个 .git 的文件夹(git的本地仓库)，
+	git remote add origin https://gitee.com/XXXX（这步为添加远程仓库）地址是你gitee仓库的地址复制过来就行了，
+	git pull origin master 命令，将码云上的仓库pull到本地文件夹，
+	git add . （. 表示所有的或者 git add + 文件名（将文件保存到缓存区），
+	git commit -m “新添加的文件内容描述” （添加文件描述，注意这里应该是英文的双引号）
+	git push origin master 将本地仓库推送到远程仓库
+	3）需要把项目（该项目是在gitee等上拉取下来进行了更改后的项目，不然需要添加远程仓库git remote add origin https://gitee.com/XXXX）
+	    推送到某个分支上时，先切换到该分支上，命令为git checkout 分支名（已经是该分支则不需要切换）然后
+	git init
+	git add .
+	git commit -m “” (注意这里应该是英文的双引号)
+	git pull
+	git push
+
+8. 简述在 Gitee 平台上，分支、标记的作用。
+	仓库的分支(Branch)规范，影响到每个团队的工作流的一致性；
+	标签(Tag)便于开发团队、测试团队和其他团队识别每个项目的版本，特别是在协同处理线上问题的时候，大家可以非常清楚地知道线上运行版本和代码库的对应关系

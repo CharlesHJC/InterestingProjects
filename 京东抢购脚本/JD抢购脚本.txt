@@ -1,0 +1,120 @@
+var nIntervId;
+var tjjsId;
+var submitDdId;
+var tjbbId;
+var count = 1;
+var tjcs = 1;
+var goDate;
+function go() {
+    console.log("-------代码执行----第【" + count + "】次");
+    count++;
+    if (Date.now() >= new Date(d)) {
+        if ($(parent.frames[0].document).find("#btn-reservation").length == 1) {
+            var sku = window.location.pathname.replace(/[^0-9]/ig, "");
+            var ref = "//cart.jd.com/gate.action?pid=" + sku + "&pcount=1&ptype=1";
+            console.log("https:" + ref);
+            $(parent.frames[0].document).find("#btn-reservation").attr("href", ref);//
+            parent.frames[0].document.getElementById("btn-reservation").click();
+            return;
+        }
+        if ($(parent.frames[0].document).find("#btn-reservation").length == 1) {
+            parent.frames[0].document.getElementById("btn-reservation").click();
+            return;
+        }
+        if ($(parent.frames[0].document).find("#InitCartUrl").length == 1) {
+            parent.frames[0].document.getElementById("InitCartUrl").click();
+            return;
+        }
+        if ($(parent.frames[0].document).find("#GotoShoppingCart").length == 1) {
+            rewrite('https://cart.jd.com/cart_index/');
+        }
+        if ($(parent.frames[0].document).find(".common-submit-btn").length == 1) {
+            var sku = window.location.pathname.replace(/[^0-9]/ig, "");
+            $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").trigger("click");
+            $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").attr("checked",true);
+            parent.frames[0].document.getElementsByClassName("common-submit-btn")[0].click();
+        }
+        if ($(parent.frames[0].document).find("#order-submit").length == 1) {
+            //parent.frames[0].document.getElementById("order-submit").click();
+            clearInterval(nIntervId);
+            tjbbId = setInterval("tjbb()", 250);
+        }
+       if ($(parent.frames[0].document).find(".common-submit-btn").length == 1) {
+            var sku = window.location.pathname.replace(/[^0-9]/ig, "");
+            $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").trigger("click");
+            $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").attr("checked",true);
+            if($(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']")[0].checked == true){
+                clearInterval(nIntervId);
+                tjjsId = setInterval("tjjs()", 300);
+                parent.frames[0].document.getElementsByClassName("common-submit-btn")[0].click();
+            }
+        }
+        if ($(parent.frames[0].document).find(".index-channel-notice-paylogo").length == 1) {
+            clearInterval(nIntervId);
+        }
+        if ($(parent.frames[0].document).find(".dialog-close-notitle").length == 1) {
+            parent.frames[0].document.getElementsByClassName("dialog-close-notitle")[0].click();
+        }
+    }
+}
+
+function tjbb() {
+    if ($(parent.frames[0].document).find(".plate-form-word").length == 1) {
+        clearInterval(tjbbId);
+    }else if ($(parent.frames[0].document).find("#order-submit").length == 1) {
+        parent.frames[0].document.getElementById("order-submit").click();
+    }
+}
+function tjjs() {
+    console.log("-----去结算提交次数【" + tjcs + "】次-----")
+    tjcs++;
+    if ($(parent.frames[0].document).find(".dialog-close-notitle").length == 1) {
+        console.log("------取消至少选一件------");
+        parent.frames[0].document.getElementsByClassName("dialog-close-notitle")[0].click();
+    }
+    console.log("------尝试提交------");
+    var sku = window.location.pathname.replace(/[^0-9]/ig, "");
+    if($(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']")[0].checked == true){
+        parent.frames[0].document.getElementsByClassName("common-submit-btn")[0].click();
+    }else if ($(parent.frames[0].document).find(".common-submit-btn").length == 1) {
+        $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").trigger("click");
+        $(parent.frames[0].document).find("input:checkbox[value^='"+sku+"']").attr("checked",true);
+    }
+    if ($(parent.frames[0].document).find(".checkout-submit").length == 1) {
+        console.log("------去结算已提交------");
+        clearInterval(tjjsId);
+        submitDdId = setInterval("submitDd()", 500);
+    }
+
+}
+function submitDd() {
+    if ($(parent.frames[0].document).find(".plate-form-word").length == 1) {
+        clearInterval(submitDdId);
+    }else if ($(parent.frames[0].document).find("#order-submit").length == 1) {
+        parent.frames[0].document.getElementById("order-submit").click();
+        clearInterval(submitDdId);
+    }
+}
+function rewrite(current) {
+    fr4me = '<frameset cols=\'*\'>\n<frame src=\'' + current + '\'/>';
+    fr4me += '</frameset>';
+    with (document) { write(fr4me); void (close()) };
+}
+
+//注入sql
+rewrite(window.location.href);
+var d = prompt("请输入抢购开始时间", "2021-03-15 14:00:00");
+var pl = prompt("请输入刷新频率【1000为一秒，数值多少合适可以自己测试】", "300");
+if (d) {
+    try {
+        goDate = new Date(d);
+        nIntervId = setInterval("go()", pl);
+    }
+    catch (e) {
+        alert("时间格式不正确,请使用yyyy-MM-dd hh:mm:ss格式,精确到秒, 请重试");
+    }
+}else {
+    alert("请重试");
+
+}
+
